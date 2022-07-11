@@ -1,25 +1,24 @@
 package data;
 
+import DSL_FX.Detail;
+import DSL_FX.Guide;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.ArrayList;
 
-@Entity(name = "company")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class Company {
+public class Company extends Guide {
+    public Company() {
+        String nameClass = getClass().getName();
+        setNameGuide(nameClass);
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+        ArrayList<Detail> details = getDetails();
+        details.add(new Detail("companyFullName", String.class.getTypeName()));
+        setDetails(details);
+    }
 
-    private String name;
-
-
+    @Override
+    public String toString() {
+        return "Company{}";
+    }
 }
