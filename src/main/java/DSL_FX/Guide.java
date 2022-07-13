@@ -4,10 +4,9 @@ import databaseController.getCurrentSessionFromConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.Session;
-import org.hibernate.query.NativeQuery;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,8 @@ public class Guide {
             Session session = getCurrentSessionFromConfig.getCurrentSessionFromConfig();
             session.beginTransaction();
             String sqlQuery = "create table guide(\n" +
-                    "    name varchar PRIMARY KEY,\n" +
+                    "    code SERIAL,\n" +
+                    "    name varchar not null,\n" +
                     "    nameDetail varchar not null ,\n" +
                     "    typeClass varchar not null\n" +
                     ")";
@@ -56,20 +56,33 @@ public class Guide {
     protected void initialize(){
         Session session = getCurrentSessionFromConfig.getCurrentSessionFromConfig();
         session.beginTransaction();
-        session.createSQLQuery(getQueryOnCreateTable()).executeUpdate();
+        session.createSQLQuery(getQueryOnCreateTable(session)).executeUpdate();
         session.getTransaction().commit();
     }
 
-    private String getQueryOnCreateTable() {
-        String query = "create table " + nameGuide + "(";
-
-        for (Detail detail: details) {
-            String sDetail = detail.getNameDetail() + " varchar,";
-            query += sDetail;
+    private String getQueryOnCreateTable(Session session) {
+        List<Object[]> guides = session.createSQLQuery("SELECT code,name,namedetail,typeclass FROM guide WHERE name = :name")
+                .setParameter("name",nameGuide)
+                .addScalar("code", new IntegerType())
+                .addScalar("name", new StringType())
+                .addScalar("namedetail", new StringType())
+                .addScalar("typeclass", new StringType())
+                .list();
+        for(Object[] guide : guides){
+            guide[0].toString();
         }
-        query = query.substring(0,query.length() - 1);
-        query += ")";
-        return query;
+
+
+//        String query = "create table " + nameGuide + "(";
+//
+//        for (Detail detail: details) {
+//            String sDetail = detail.getNameDetail() + " varchar,";
+//            query += sDetail;
+//        }
+//        query = query.substring(0,query.length() - 1);
+//        query += ")";
+//        return query;
+        return "";
     }
 
 }

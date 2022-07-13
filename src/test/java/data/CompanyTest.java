@@ -13,7 +13,7 @@ class CompanyTest {
     @Test
     void test1(){
         try {
-            java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+//            java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
             Session session = getCurrentSessionFromConfig.getCurrentSessionFromConfig();
             session.beginTransaction();

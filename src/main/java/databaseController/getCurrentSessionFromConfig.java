@@ -1,5 +1,6 @@
 package databaseController;
 
+import DSL_FX.ClassGuide;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
