@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Detail {
-    String nameDetail;
-    String typeClass;
+    private String nameDetail;
+    private String typeClass;
 }

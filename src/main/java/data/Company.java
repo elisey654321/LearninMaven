@@ -9,16 +9,13 @@ import java.util.ArrayList;
 @Data
 public class Company extends Guide {
     public Company() {
-        String nameClass = getClass().getName();
-        setNameGuide(nameClass);
 
+        //++Add columns
         ArrayList<Detail> details = getDetails();
         details.add(new Detail("companyFullName", String.class.getTypeName()));
         setDetails(details);
-    }
+        //--Add columns
 
-    @Override
-    public String toString() {
-        return "Company{}";
+        initialize();
     }
 }
