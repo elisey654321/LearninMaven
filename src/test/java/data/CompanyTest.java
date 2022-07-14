@@ -15,10 +15,14 @@ class CompanyTest {
         try {
 //            java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
-            Session session = getCurrentSessionFromConfig.getCurrentSessionFromConfig();
-            session.beginTransaction();
-            session.createSQLQuery("drop table guide").executeUpdate();
-            session.getTransaction().commit();
+            try {
+//                Session session = getCurrentSessionFromConfig.getCurrentSessionFromConfig();
+//                session.beginTransaction();
+//                session.createSQLQuery("drop table guide").executeUpdate();
+//                session.getTransaction().commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             Company company = new Company();
             System.out.println(company);
