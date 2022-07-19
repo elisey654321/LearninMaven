@@ -32,17 +32,8 @@ public class Guide {
         setNameGuide(nameClass.replace("data.","").toLowerCase());
 
         createGuide();
-//        addBasesDetail();
         initialize();
 
-    }
-
-    private void addBasesDetail() {
-        Detail name = new Detail("name", String.class.getName());
-        Detail id = new Detail("id", String.class.getName());
-
-        this.details.add(name);
-        this.details.add(id);
     }
 
     private void createGuide() {
@@ -83,13 +74,13 @@ public class Guide {
         if (guides.size() == 0) {
             query = getStringCreateNewTable(session);
         }else {
-            query = getStringAlteTable(query, guides);
+            query = getStringAlteTable(query, guides, session);
         }
       
         return query;        
     }
 
-    private String getStringAlteTable(String query, List<Object[]> guides) {
+    private String getStringAlteTable(String query, List<Object[]> guides,Session session) {
         String alterTable = "";
 
         for (Detail detail : details) {
@@ -102,7 +93,13 @@ public class Guide {
             }
             if (created){
                 alterTable += detail.getNameDetail() + " varchar,";
+                session.save(ClassGuide.builder()
+                        .name(nameGuide)
+                        .typeClass(detail.getTypeClass())
+                        .nameDetail(detail.getNameDetail()).build());
             }
+
+
         }
 
         if (!alterTable.equals("")){
@@ -140,4 +137,49 @@ public class Guide {
                 .list();
     }
 
+    public ArrayList<Guide> getListData(){
+        ArrayList<Guide> guideArrayList = new ArrayList<>();
+
+        Session session = getCurrentSessionFromConfig.getCurrentSessionFromConfig();
+        session.beginTransaction();
+
+        List<Object[]> list = session.createSQLQuery("SELECT * FROM " + nameGuide).list();
+        for (Object[] guide : list) {
+            String nameDetail = guide[2].toString();
+
+        }
+
+
+        session.getTransaction().commit();
+
+        return guideArrayList;
+    }
+
+    public void saveDataOnDB(){
+
+        String sqlQuery = "INSERT INTO " + nameGuide + " VALUES(";
+
+        Class<?> clazz = this.getClass();
+        String nameClass = clazz.getName();
+
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(DataDSL.class)){
+                try {
+                    field.setAccessible(true);
+                    String value = (String) field.get(this);
+                    if (value != null) {
+                        sqlQuery += "'" + value + "',";
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        sqlQuery = sqlQuery.substring(0,sqlQuery.length()-1) + ")";
+
+        Session session = getCurrentSessionFromConfig.getCurrentSessionFromConfig();
+        session.beginTransaction();
+        session.createSQLQuery(sqlQuery).executeUpdate();
+        session.getTransaction().commit();
+    }
 }

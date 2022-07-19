@@ -2,7 +2,14 @@ package data;
 
 import DSL_FX.DataDSL;
 import DSL_FX.Guide;
+import lombok.*;
 
+@Builder
+@AllArgsConstructor
+@Data
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Item extends Guide {
 
     @DataDSL
