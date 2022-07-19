@@ -20,6 +20,7 @@ public class Guide {
 
     public Guide() {
         Class<?> clazz = this.getClass();
+        String nameClass = clazz.getName();
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(DataDSL.class)){
                 String name = field.getName();
@@ -28,25 +29,20 @@ public class Guide {
                 details.add(new Detail(name, type));
             }
         }
-
-        try {
-            this.getClass().getDeclaredField("name");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-
-        createGuide();
-
-        String nameClass = this.getClass().getName();
         setNameGuide(nameClass.replace("data.","").toLowerCase());
 
+        createGuide();
+//        addBasesDetail();
+        initialize();
+
+    }
+
+    private void addBasesDetail() {
         Detail name = new Detail("name", String.class.getName());
         Detail id = new Detail("id", String.class.getName());
 
         this.details.add(name);
         this.details.add(id);
-
-        initialize();
     }
 
     private void createGuide() {

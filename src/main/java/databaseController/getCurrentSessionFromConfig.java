@@ -7,6 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.logging.Level;
+
 @Data
 public abstract class getCurrentSessionFromConfig {
     private static Boolean createdGuide = false;
@@ -16,6 +18,8 @@ public abstract class getCurrentSessionFromConfig {
     }
 
     public static Session getCurrentSessionFromConfig() {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+
         Configuration configure = new Configuration();
         if (createdGuide) {
             configure.addAnnotatedClass(ClassGuide.class);

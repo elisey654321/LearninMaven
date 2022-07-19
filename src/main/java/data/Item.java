@@ -1,0 +1,19 @@
+package data;
+
+import DSL_FX.DataDSL;
+import DSL_FX.Guide;
+
+public class Item extends Guide {
+
+    @DataDSL
+    private String name;
+    @DataDSL
+    private String weight;
+    @DataDSL
+    private String height;
+    @DataDSL
+    private String width;
+
+    @DataDSL
+    private String globalName;
+}
